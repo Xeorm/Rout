@@ -1,0 +1,23 @@
+TIMELINE:
+
+Week 3
+	-Framework for code
+	-Get something on screen
+	-Menu
+
+Week 4
+	-Camera movement
+	-Terrain (Floor)
+	-Other various Assets
+	-Create Audio stuff(ish)
+
+Week 5
+	-Collision detection
+	-Torches (WTF)
+	-Light System is done
+	-Cue sound with Audio
+	
+	
+	
+	IF YOU WANT TO EDIT .DDS FILES, GRABBA DEEZ PLUGINZ
+	http://developer.download.nvidia.com/assets/tools/files/Photoshop_Plugins_x64_8.50.1130.1235.exe

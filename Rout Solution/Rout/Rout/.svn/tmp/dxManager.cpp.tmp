@@ -1,0 +1,592 @@
+#include "stdafx.h"
+#include "dxManager.h"
+#include <sstream>
+#include "FullTile.h"
+#include "EmptyTile.h"
+#include "Particle.h"
+/*******************************************************************
+* Constructor
+*******************************************************************/
+dxManager::dxManager() :	pD3DDevice(NULL), pSwapChain(NULL), pRenderTargetView(NULL), pVertexBuffer(0),
+							pVertexLayout(0), pBasicEffect(0), pRS(0), pDepthStencilView(0),
+							pTech(0), pFX(0)
+
+{
+	D3DXMatrixIdentity(&pWorld);
+	D3DXMatrixIdentity(&pWVP);
+	pCamera = new Camera();
+}
+/*******************************************************************
+* Destructor
+*******************************************************************/
+dxManager::~dxManager()
+{
+	if ( pRenderTargetView ) pRenderTargetView->Release();
+	if ( pDepthStencilView ) pDepthStencilView->Release();
+	if ( pDepthStencilBuffer ) pDepthStencilBuffer->Release();
+	if ( pSwapChain ) pSwapChain->Release();
+	if ( pD3DDevice ) pD3DDevice->Release();
+	if ( pFX ) pFX->Release();
+	if ( pVertexBuffer ) pVertexBuffer->Release();
+	if ( pVertexLayout ) pVertexLayout->Release();
+	for ( UINT i = 0; i < 1; i++)
+	{
+		if ( textureArr[i] ) textureArr[i]->Release();
+		if ( specMapArr[i] ) specMapArr[i]->Release();
+	}
+}
+/*******************************************************************
+* Initializes Direct3D Device
+*******************************************************************/
+bool dxManager::initialize( HWND* hW )
+{
+	//window handle
+	hWnd = hW;
+	
+	//get window dimensions
+	RECT rc;
+    GetClientRect( *hWnd, &rc );
+    UINT width = rc.right - rc.left;
+    UINT height = rc.bottom - rc.top;
+
+	//Set up DX swap chain
+	//--------------------------------------------------------------
+	DXGI_SWAP_CHAIN_DESC swapChainDesc;
+	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+	
+	//set buffer dimensions and format
+	swapChainDesc.BufferCount = 2;
+	swapChainDesc.BufferDesc.Width = width;
+	swapChainDesc.BufferDesc.Height = height;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;;
+	swapChainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	//set refresh rate
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	
+	//sampling settings
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.SampleDesc.Count = 1;
+
+	//output window handle
+	swapChainDesc.OutputWindow = *hWnd;
+	swapChainDesc.Windowed = true;    
+	
+	swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+	swapChainDesc.Flags = 0;
+	//Create the D3D device
+	//--------------------------------------------------------------
+	if ( FAILED( D3D10CreateDeviceAndSwapChain(		NULL, 
+													D3D10_DRIVER_TYPE_HARDWARE, 
+													NULL, 
+													0, 
+													D3D10_SDK_VERSION, 
+													&swapChainDesc, 
+													&pSwapChain, 
+													&pD3DDevice ) ) ) return fatalError(L"D3D device creation failed");
+
+	D3DX10CreateSprite(pD3DDevice, 0, &sprite);
+	D3DX10CreateFont( pD3DDevice, 40, 0, 0, 0, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, L"Impact", &font );
+
+	//SHADER STAGE
+	//*****************************************************************************
+		
+	//Load Basic Effect and Technique 
+	//--------------------------------------------------------------
+	if ( FAILED( D3DX10CreateEffectFromFile(	L"basicEffect.fx", 
+												NULL, NULL, 
+												"fx_4_0", 
+												D3D10_SHADER_ENABLE_STRICTNESS, 
+												0, 
+												pD3DDevice, 
+												NULL, 
+												NULL, 
+												&pBasicEffect, 
+												NULL, 
+												NULL	) ) ) return fatalError(L"Could not load effect file!");	
+
+	pBasicTechnique = pBasicEffect->GetTechniqueByName("Render");
+	
+	//create matrix effect pointers
+	pViewMatrixEffectVariable = pBasicEffect->GetVariableByName( "View" )->AsMatrix();
+	pProjectionMatrixEffectVariable = pBasicEffect->GetVariableByName( "Projection" )->AsMatrix();
+	pWorldMatrixEffectVariable = pBasicEffect->GetVariableByName( "World" )->AsMatrix();
+
+	//INPUT ASSEMBLY STAGE
+	//*****************************************************************************
+	
+	//Create Input Layout
+	//--------------------------------------------------------------	
+	
+	D3D10_INPUT_ELEMENT_DESC layout[] = 
+	{	
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+	};
+	UINT numElements = 2;
+
+	D3D10_PASS_DESC PassDesc;
+	pBasicTechnique->GetPassByIndex( 0 )->GetDesc( &PassDesc );
+	if ( FAILED( pD3DDevice->CreateInputLayout( layout, 
+												numElements, 
+												PassDesc.pIAInputSignature,
+												PassDesc.IAInputSignatureSize, 
+												&pVertexLayout ) ) ) return fatalError(L"Could not create Input Layout!");
+
+	// Set the input layout
+	pD3DDevice->IASetInputLayout( pVertexLayout );
+
+	//create vertex buffer (space for 100 vertices)
+	//---------------------------------------------------------------------------------
+	UINT numVertices = 400;
+
+	D3D10_BUFFER_DESC bd;
+	bd.Usage = D3D10_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof( vertex ) * numVertices;
+	bd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
+	bd.CPUAccessFlags = D3D10_CPU_ACCESS_WRITE;
+	bd.MiscFlags = 0;
+
+	if ( FAILED( pD3DDevice->CreateBuffer( &bd, NULL, &pVertexBuffer ) ) ) return fatalError(L"Could not create vertex buffer!");;
+
+	// Set vertex buffer
+	UINT stride = sizeof( vertex );
+	UINT offset = 0;
+	pD3DDevice->IASetVertexBuffers( 0, 1, &pVertexBuffer, &stride, &offset );	
+
+	//RASTERIZER STAGE SETUP
+	//*****************************************************************************
+	
+	//Create viewport
+	//--------------------------------------------------------------
+	
+	//create viewport structure	
+	viewPort.Width = width;
+	viewPort.Height = height;
+	viewPort.MinDepth = 0.0f;
+	viewPort.MaxDepth = 1.0f;
+	viewPort.TopLeftX = 0;
+	viewPort.TopLeftY = 0;
+
+	pD3DDevice->RSSetViewports(1, &viewPort);
+
+	// OUTPUT-MERGER STAGE
+	//*****************************************************************************
+
+	//Create render target view
+	//--------------------------------------------------------------
+	
+	//try to get the back buffer
+	ID3D10Texture2D* pBackBuffer;
+	if ( FAILED( pSwapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*) &pBackBuffer) ) ) return fatalError(L"Could not get back buffer");
+
+	//set back buffer dimensions
+	D3D10_TEXTURE2D_DESC* bBufferDesc = new D3D10_TEXTURE2D_DESC();
+	pBackBuffer->GetDesc(bBufferDesc);
+	backBufferWidth = bBufferDesc->Width;
+	backBufferHeight = bBufferDesc->Height;
+
+	//try to create render target view
+	if ( FAILED( pD3DDevice->CreateRenderTargetView(pBackBuffer, NULL, &pRenderTargetView) ) ) return fatalError(L"Could not create render target view");
+	
+	pBackBuffer->Release();
+	pD3DDevice->OMSetRenderTargets(1, &pRenderTargetView, NULL);
+
+	// Set up the view and projection matrices
+	//*****************************************************************************
+	D3DXVECTOR3 camera[3] = {	D3DXVECTOR3(0.0f, 0.0f, -5.0f),
+								D3DXVECTOR3(0.0f, 0.0f, 1.0f),
+								D3DXVECTOR3(0.0f, 1.0f, 0.0f) };
+	D3DXMatrixLookAtLH(&viewMatrix, &camera[0], &camera[1], &camera[2]);
+		
+    D3DXMatrixPerspectiveFovLH(&projectionMatrix, (float)D3DX_PI * 0.5f, (float)width/(float)height, 0.1f, 100.0f);
+
+	pClearColor = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+	
+	
+
+	//everything completed successfully
+	return true;
+}
+
+
+bool dxManager::loadImage(LPTSTR lpFileName)
+{
+	DWORD nDirecotryLength = 255;
+	TCHAR lpCurrentDir[255];
+	GetCurrentDirectory(nDirecotryLength,lpCurrentDir);
+	//LPTSTR lpFileName = L"\\testA.bmp";
+	lstrcat(lpCurrentDir,(LPCTSTR)lpFileName);
+	if (FAILED(D3DX10GetImageInfoFromFile(lpCurrentDir, NULL, &InfoFromFile,NULL) ) )
+	{
+		return false;
+	}
+
+	LoadImageInfo.Width = InfoFromFile.Width;
+	LoadImageInfo.Height = InfoFromFile.Height;
+	LoadImageInfo.Depth = InfoFromFile.Depth;
+	LoadImageInfo.FirstMipLevel = 1;
+	LoadImageInfo.MipLevels = InfoFromFile.MipLevels;
+	LoadImageInfo.Usage = D3D10_USAGE_DEFAULT;
+	LoadImageInfo.BindFlags = D3D10_BIND_SHADER_RESOURCE;
+	LoadImageInfo.CpuAccessFlags = 0;
+	LoadImageInfo.MiscFlags = 0;
+	LoadImageInfo.Format = InfoFromFile.Format;
+	LoadImageInfo.Filter = D3DX10_FILTER_NONE;
+	LoadImageInfo.MipFilter = D3DX10_FILTER_NONE;
+	LoadImageInfo.pSrcInfo = &InfoFromFile;
+
+	HRESULT result = D3DX10CreateShaderResourceViewFromFile(pD3DDevice, lpCurrentDir, &LoadImageInfo, NULL, &shaderResource,NULL);
+	if( FAILED(result) ) {return false;}
+	return true;
+}
+
+
+/*******************************************************************
+* Scene Renderer
+*******************************************************************/
+void dxManager::renderScene()
+{
+	//clear scene
+	pD3DDevice->ClearRenderTargetView( pRenderTargetView, D3DXCOLOR(0,0,0,0) );
+
+	//create world matrix
+	static float r;
+	D3DXMATRIX w;
+	D3DXMatrixIdentity(&w);
+
+	//set effect matrices
+	pWorldMatrixEffectVariable->SetMatrix(w);
+	pViewMatrixEffectVariable->SetMatrix(viewMatrix);
+	pProjectionMatrixEffectVariable->SetMatrix(projectionMatrix);
+
+
+	sprite->Begin(D3DX10_SPRITE_SORT_TEXTURE);
+
+	//2D SPRITE DRAW CALLS
+	list<GameEntity2D>::iterator it;
+	for(it = entity2DList.begin(); it != entity2DList.end(); it++)
+	{
+		//it->PreDraw(backBufferWidth, backBufferHeight);
+		sprite->DrawSpritesBuffered(&it->sprite, 1);
+	}
+	sprite->Flush();
+	sprite->End();
+	
+	//draw text
+	list<TextField*>::iterator ite;
+	for (ite = EntityManager::getInstance()->textFieldList.begin();ite!=EntityManager::getInstance()->textFieldList.end();ite++)
+	{
+		if ((*ite)->changed) //get new bounding RECT
+		{
+			(*ite)->loc.bottom = (*ite)->loc.top + font->DrawTextA(NULL,(*ite)->getText().c_str(),-1,&((*ite)->loc),DT_CALCRECT,(*ite)->color);
+			(*ite)->changed=false;
+		}
+		font->DrawTextA(NULL,(*ite)->getText().c_str(),-1,&((*ite)->loc),0,(*ite)->color);
+	}
+	
+	
+	// Set primitive topology 
+
+	pD3DDevice->IASetPrimitiveTopology( D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP );
+
+	//get technique desc
+	D3D10_TECHNIQUE_DESC techDesc;
+	pBasicTechnique->GetDesc( &techDesc );
+	
+
+	//flip buffers
+	pSwapChain->Present(0,0);
+}
+
+/*******************************************************************
+* Scene 3D Renderer
+*******************************************************************/
+void dxManager::render3DScene(void)
+{
+	
+	//Clears the screen with the given color and clears the stencil buffer
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, pClearColor);
+	pD3DDevice->ClearDepthStencilView(pDepthStencilView, D3D10_CLEAR_DEPTH|D3D10_CLEAR_STENCIL, 1.0f, 0);
+	//Restores default states
+	pD3DDevice->OMSetDepthStencilState(0, 0);
+	float blendFactors[] = {0.0f, 0.0f, 0.0f, 0.0f};
+	pD3DDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
+    pD3DDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	pD3DDevice->IASetInputLayout(pVertexLayout);
+
+	// set constants
+	pfxEyePosVar->SetRawValue(&pCamera->position(), 0, sizeof(float)*4);
+
+
+	pfxLightVar->SetRawValue(&pLight, 0, sizeof(Light));
+	
+	//pfxLightType->SetRawValue(lightTypes,0,sizeof(int)*72);
+	//pfxActiveType->SetRawValue(active,0,sizeof(int)*72);
+	
+	pWVP = pWorld * pCamera->view() * pCamera->proj();
+	pfxWVPVar->SetMatrix((float*)&pWVP);
+	pfxWorldVar->SetMatrix((float*)&pWorld);
+
+	// Don't transform texture coordinates, so just use identity transformation.
+	D3DXMATRIX texMtx;
+	D3DXMatrixIdentity(&texMtx);
+	pfxTexMtxVar->SetMatrix((float*)&texMtx);
+
+	//Drawing logic
+
+	
+	//pLights[1].pos = pCamera->position();
+	//pLights[1].pos.y += 0.4f;
+
+	D3D10_TECHNIQUE_DESC techDesc;
+    pTech->GetDesc( &techDesc );
+	//temp
+	int numLights = 2;
+    for(UINT p = 0; p < techDesc.Passes; ++p)
+    {
+			//temp
+		for (int i=0;i<numLights;i++)
+		{
+			active[i]=i;
+		}
+
+		pfxLightType->SetIntArray(lightTypes,0,72);
+		pfxActiveVar->SetIntArray(active,0,numLights);
+		pfxNumLightsVar->SetInt(numLights);
+        pTech->GetPassByIndex( p )->Apply(0);
+<<<<<<< .mine
+
+		UINT i = 0;
+		UINT length = EntityManager::getInstance()->entityTally[0];
+=======
+>>>>>>> .r144
+
+		//EmptyTile Draw Pass
+		pfxDiffuseMapVar->SetResource(textureArr[0]);
+		pfxSpecMapVar->SetResource(specMapArr[0]);
+
+		for each(EmptyTile* emptyTile in EntityManager::getInstance()->emptyTileVector)
+		{
+			emptyTile->draw();
+		}
+
+		//FullTile DrawPass
+		pfxDiffuseMapVar->SetResource(textureArr[0]);
+		pfxSpecMapVar->SetResource(specMapArr[0]);
+		
+		for each(FullTile* fullTile in EntityManager::getInstance()->fullTileVector)
+		{
+			fullTile->draw();
+		}
+		/*to draw particles
+		Particle parti;
+		D3DXMATRIX temp = parti.pWorld* pCamera->view() * pCamera->proj();
+		mfxWVPVar->SetMatrix((float*)&temp);
+		mfxWorldVar->SetMatrix((float*)&p.pWorld);
+		pTech->GetPassByIndex( p )->Apply(0);
+		parti.draw();
+		*/
+    }
+	//flip buffers
+	pSwapChain->Present(0,0);
+}
+
+void dxManager::loadTextures()
+{
+	list<GameEntity2D>::iterator it;
+	for(it = entity2DList.begin(); it != entity2DList.end(); it++)
+	{
+		if(!it->loaded)
+		{
+			if(loadImage(it->textureLoc))
+			{
+				it->shaderResource = shaderResource;
+				it->sprite.pTexture = shaderResource;
+				it->LoadImageInfo = LoadImageInfo;
+				it->initSprite();
+				it->loaded = true;
+			}
+		}
+	}
+}
+
+/*******************************************************************
+* Gets Camera
+*******************************************************************/
+Camera* dxManager::getCamera(void)
+{
+	return pCamera;
+}
+
+/*******************************************************************
+* Builds FX Effect files
+*******************************************************************/
+void dxManager::buildFX()
+{
+	DWORD shaderFlags = D3D10_SHADER_ENABLE_STRICTNESS;
+#if defined( DEBUG ) || defined( _DEBUG )
+    shaderFlags |= D3D10_SHADER_DEBUG;
+	shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
+#endif
+  
+	ID3D10Blob* compilationErrors = 0;
+	HRESULT hr = 0;
+	hr = D3DX10CreateEffectFromFile(L"tex.fx", 0, 0, 
+		"fx_4_0", shaderFlags, 0, pD3DDevice, 0, 0, &pFX, &compilationErrors, 0);
+	if(FAILED(hr))
+	{
+		if( compilationErrors )
+		{
+			MessageBoxA(0, (char*)compilationErrors->GetBufferPointer(), 0, 0);
+			ReleaseCOM(compilationErrors);
+		}
+		DXTrace(__FILE__, (DWORD)__LINE__, hr, L"D3DX10CreateEffectFromFile", true);
+	} 
+
+	pTech = pFX->GetTechniqueByName("TexTech");
+	
+	pfxWVPVar        = pFX->GetVariableByName("gWVP")->AsMatrix();
+	pfxWorldVar      = pFX->GetVariableByName("gWorld")->AsMatrix();
+	pfxEyePosVar     = pFX->GetVariableByName("gEyePosW");
+	pfxLightVar      = pFX->GetVariableByName("gLight");
+	pfxLightType	 = pFX->GetVariableByName("gLightTypes")->AsScalar();
+	pfxActiveVar     = pFX->GetVariableByName("gActive")->AsScalar();
+	pfxNumLightsVar  = pFX->GetVariableByName("gNumLights")->AsScalar();
+	pfxDiffuseMapVar = pFX->GetVariableByName("gDiffuseMap")->AsShaderResource();
+	pfxSpecMapVar    = pFX->GetVariableByName("gSpecMap")->AsShaderResource();
+	pfxTexMtxVar     = pFX->GetVariableByName("gTexMtx")->AsMatrix();
+}
+
+
+/*******************************************************************
+* Builds Vertex Layouts
+*******************************************************************/
+void dxManager::buildVertexLayouts()
+{
+	// Create the vertex input layout.
+	D3D10_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	// Create the input layout
+    D3D10_PASS_DESC PassDesc;
+    pTech->GetPassByIndex(0)->GetDesc(&PassDesc);
+    HR(pD3DDevice->CreateInputLayout(vertexDesc, 3, PassDesc.pIAInputSignature,
+		PassDesc.IAInputSignatureSize, &pVertexLayout));
+}
+
+/*******************************************************************
+* Load 3D Textures
+*******************************************************************/
+void dxManager::load3DTextures()
+{
+	HR(D3DX10CreateShaderResourceViewFromFile(pD3DDevice, 
+		L"sandstone.dds", 0, 0, &textureArr[0], 0 ));
+	HR(D3DX10CreateShaderResourceViewFromFile(pD3DDevice, 
+		L"defaultspec.dds", 0, 0, &specMapArr[0], 0 ));
+}
+
+/*******************************************************************
+* New Game
+*******************************************************************/
+void dxManager::newGame(void)
+{
+	// Resize the swap chain and recreate the render target view.
+	D3D10_TEXTURE2D_DESC depthStencilDesc;
+	
+	depthStencilDesc.Width     = 800;
+	depthStencilDesc.Height    = 600;
+	depthStencilDesc.MipLevels = 1;
+	depthStencilDesc.ArraySize = 1;
+	depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.SampleDesc.Count   = 1; // multisampling must match
+	depthStencilDesc.SampleDesc.Quality = 0; // swap chain values.
+	depthStencilDesc.Usage          = D3D10_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags      = D3D10_BIND_DEPTH_STENCIL;
+	depthStencilDesc.CPUAccessFlags = 0; 
+	depthStencilDesc.MiscFlags      = 0;
+
+	HR(pD3DDevice->CreateTexture2D(&depthStencilDesc, 0, &pDepthStencilBuffer));
+	HR(pD3DDevice->CreateDepthStencilView(pDepthStencilBuffer, 0, &pDepthStencilView));
+
+
+	// Bind the render target view and depth/stencil view to the pipeline
+	pD3DDevice->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+
+	buildFX();
+	buildVertexLayouts();
+
+	LevelManager::getInstance()->LoadLevel("Maze.txt");
+	//EntityManager::getInstance()->entity3DList.push_back(new CollisionEntity("C:\\Users\\IGMAdmin\\Desktop\\Rout\\Rout Assets\\BonewheelAxel.obj"));
+	EntityManager::getInstance()->initEntities(pD3DDevice);
+	load3DTextures();
+	//Sets up the default lighting
+	pLight.dir      = D3DXVECTOR3(0.57735f, -0.57735f, 0.57735f);
+	pLight.ambient  = D3DXCOLOR(0.135f, 0.135f, 0.135f, 1.0f);
+	pLight.diffuse  = D3DXCOLOR(0.135f, 0.135f, 0.135f, 1.0f);
+	pLight.specular = D3DXCOLOR(0.2f, 0.2f, 0.2f, 1.0f);
+	lightTypes[0]=0;
+	active[0] = 0;
+
+<<<<<<< .mine
+	pLights[1].pos = pCamera->position();
+	pLights[1].pos.y += 0.4f;
+	//should move it to the right shoulder, too, but that'll depend on camera's rotation, so one mo' while we get the rest of it working
+	pLights[1].ambient = D3DXCOLOR(0.9f, 0.07f, 0.07f, 1.0f);
+	pLights[1].diffuse = D3DXCOLOR(0.9f, 0.07f, 0.07f, 1.0f);
+	pLights[1].specular = D3DXCOLOR(0.9f, 0.07f, 0.07f, 1.0f);
+	pLights[1].att = D3DXVECTOR3(1,1,1);
+	
+=======
+	//pLights[1].pos = pCamera->position();
+	//pLights[1].pos.y += 0.4f;
+	////should move it to the right shoulder, too, but that'll depend on camera's rotation, so one mo' while we get the rest of it working
+	//pLights[1].ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	//pLights[1].diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	//pLights[1].specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+	//
+>>>>>>> .r144
+	//set up the light types for the array
+	//light types for torches
+	for(int i = 1; i < 64; i++)
+	{
+		lightTypes[i] = 1;
+	}
+	//light types for Fated
+	for(int i = 64; i < 68; i++)
+	{
+		lightTypes[i] = 1;
+	}
+	//light types for exit doors
+	for(int i = 64; i < 72; i++)
+	{
+		lightTypes[i] = 1;
+	}
+
+	//initialize values for torches
+	for(int i = 2; i < 64; i++)
+	{
+		//pLights[i].ambient = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+		//pLights[i].diffuse = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+		//pLights[i].specular = D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f);
+		////POSITIONS FOR TORCH LIGHTS HERE
+
+	}
+	pCamera->setLens(PI*0.25f, 800/600, 1.0f, 1000.0f);
+	pCamera->setPosition(EntityManager::getInstance()->currentPlayer->getPos());
+	EntityManager::getInstance()->currentPlayer->setCamera(pCamera);
+}
+
+/*******************************************************************
+* Fatal Error Handler
+*******************************************************************/
+bool dxManager::fatalError(LPCWSTR msg)
+{
+	MessageBox(*hWnd, msg, L"Fatal Error!", MB_ICONERROR);
+	return false;
+}

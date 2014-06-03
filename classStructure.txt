@@ -1,0 +1,73 @@
+Game
+
+MenuManager
+StateManager
+ - Static States
+ - Current State
+ - Previous State
+GraphicsManager
+ - Import Models
+ - Draw Models
+ - Implement Lighting
+ - Handle All Lighting Calls
+ - Handles Animation
+  - Animation Duration
+EnemyManager
+ - Populate Enemies from Level
+ - Check Collision With Player
+ - Call Updates 
+AudioManager
+ - Handle All Audio calls
+ - Play Sounds
+ - Pause Sounds
+ - Stop Sounds
+ - Change Volume
+ - Audio Channels
+ 
+Camera
+
+GameEntity - Torch, UI Element
+ - Drawable
+ CollisionEntity - MazeWall, Phylactery, Exit
+	- Collideable
+	MovableEntity - Player, Enemy
+		- Movable
+Level(Maze)
+ - Contains Level Data
+ - AI Node Map
+ - Monster Start Positions
+ - Player Start Positions
+ - Torch Positions
+ - Exit Position ( Win Condition)
+MazeCell
+ - Walled Sides
+ - Torch Sides
+MazeWall
+ - Wall Properties
+  - Width
+  - Height
+Player
+ - Position
+ - Update
+ - Controls
+  - Movement Calls
+  - Interact Calls
+  - Set Phylactery
+  - Kill Command (Respawn)
+ - Move
+ - Spawn
+ - Light Torch
+ - Control Camera(Swap to map view)
+Enemy
+ - Position
+ - AI
+  - Check Enemy LoS
+  - Patrol
+  - Chase 
+  - Kill (On Collide)
+ - Move 
+Torch
+ - Light
+Phylactery
+ - Position
+

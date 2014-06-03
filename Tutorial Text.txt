@@ -1,0 +1,54 @@
+Things The Player Needs To Learn:
+
+ Trigger: On Game Start
+ Display: "Use WASD to move.  Press P to pause."
+
+ Trigger: On Exit First Chamber
+ Display: "Press 'Space' to light wall torches."
+
+ Trigger: On Light First Torch
+ Display: "Press Tab to open the map."
+
+ Trigger: On map first opened
+ Display: "I need to get out of here."
+
+ Trigger: On First Map Close
+ Display: "And I'll need to bring this thing with me."
+ NOTE: Raise Phylactery by 0.5 during this line.
+
+ Trigger: 5 seconds after map close
+ Display: "Have to do this carefully. /n Press left click to place the phylactery."
+
+ Trigger: After phylactery placed
+ Display: "If those things catch me, I'll reform here at my phylactery.  I can't let them catch me with it..."
+
+ Trigger: Door encountered before key
+ Display: "I need a key to open this door.  I think there was one back in the first chamber..."
+
+ Trigger: Key encountered before door
+ Display: "Hmm.  A key.  I wonder what doors it'll open... /n Purple/Green key acquired!"
+
+ Trigger: Key Encountered
+ Display: "[color] key acquired!"
+
+ Trigger: First death to Fated
+ Display: "Those things can come at me through walls!"
+
+ Trigger: First death to Bonewheel
+ Display: "Those big guys didn't react to me--so long as I keep away from their front, I should be good."
+
+ Trigger: First death to Eater
+ Display: "Those things are disgusting.  Good thing they're not smart enough to look for this little gem."
+
+- Keybinds
+- Phylactery = Spawn Point
+- Keep Phylactery Away from Monsters
+- Try to Get Out of Maze
+- Green Light is Bad (?)
+- Need the Keys
+- Light Torches
+- Infinite Torture if Killed While Carrying Phylactery
+- Enemies Hunt You, Don't Care About Phylactery
+- Bonewheels Won't Chase
+- Faded Find You Through Walls
+- Must Leave the Maze With Phylactery to Win

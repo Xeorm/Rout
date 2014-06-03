@@ -1,0 +1,545 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/repos/Rout/!svn/ver/368/Rout%20Solution/Rout/Rout
+END
+Rout.vcxproj
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/357/Rout%20Solution/Rout/Rout/Rout.vcxproj
+END
+GameMenu.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/288/Rout%20Solution/Rout/Rout/GameMenu.h
+END
+Eater.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/353/Rout%20Solution/Rout/Rout/Eater.h
+END
+EntityManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/Rout/!svn/ver/350/Rout%20Solution/Rout/Rout/EntityManager.cpp
+END
+Door.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/Rout/!svn/ver/315/Rout%20Solution/Rout/Rout/Door.h
+END
+Rout.vcxproj.filters
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/repos/Rout/!svn/ver/357/Rout%20Solution/Rout/Rout/Rout.vcxproj.filters
+END
+Enemy.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/345/Rout%20Solution/Rout/Rout/Enemy.cpp
+END
+d3dUtil.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/55/Rout%20Solution/Rout/Rout/d3dUtil.h
+END
+GameTimer.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/55/Rout%20Solution/Rout/Rout/GameTimer.h
+END
+MovableEntity.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/33/Rout%20Solution/Rout/Rout/MovableEntity.cpp
+END
+Phylactery.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/221/Rout%20Solution/Rout/Rout/Phylactery.cpp
+END
+BoxEntity.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/172/Rout%20Solution/Rout/Rout/BoxEntity.cpp
+END
+tex.fx
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/Rout/!svn/ver/317/Rout%20Solution/Rout/Rout/tex.fx
+END
+Player.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/351/Rout%20Solution/Rout/Rout/Player.cpp
+END
+TextField.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/78/Rout%20Solution/Rout/Rout/TextField.h
+END
+Camera.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/181/Rout%20Solution/Rout/Rout/Camera.h
+END
+Key.h
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/repos/Rout/!svn/ver/315/Rout%20Solution/Rout/Rout/Key.h
+END
+AudioManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/351/Rout%20Solution/Rout/Rout/AudioManager.h
+END
+lighthelper.fx
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/195/Rout%20Solution/Rout/Rout/lighthelper.fx
+END
+Door.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/358/Rout%20Solution/Rout/Rout/Door.cpp
+END
+dxManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/368/Rout%20Solution/Rout/Rout/dxManager.cpp
+END
+Particle.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/288/Rout%20Solution/Rout/Rout/Particle.h
+END
+Bonewheel.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/310/Rout%20Solution/Rout/Rout/Bonewheel.cpp
+END
+Faded.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/292/Rout%20Solution/Rout/Rout/Faded.h
+END
+textTutorial.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/341/Rout%20Solution/Rout/Rout/textTutorial.cpp
+END
+EmptyTile.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/346/Rout%20Solution/Rout/Rout/EmptyTile.cpp
+END
+Rout.vcxproj.user
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/25/Rout%20Solution/Rout/Rout/Rout.vcxproj.user
+END
+Slider.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/59/Rout%20Solution/Rout/Rout/Slider.cpp
+END
+Main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/357/Rout%20Solution/Rout/Rout/Main.cpp
+END
+MovableEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/137/Rout%20Solution/Rout/Rout/MovableEntity.h
+END
+defaultspec.dds
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/79/Rout%20Solution/Rout/Rout/defaultspec.dds
+END
+Phylactery.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/217/Rout%20Solution/Rout/Rout/Phylactery.h
+END
+Maze.txt
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/362/Rout%20Solution/Rout/Rout/Maze.txt
+END
+DeathScreen.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/264/Rout%20Solution/Rout/Rout/DeathScreen.h
+END
+Resource.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/48/Rout%20Solution/Rout/Rout/Resource.h
+END
+GameEntity2D.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/77/Rout%20Solution/Rout/Rout/GameEntity2D.cpp
+END
+stdafx.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/78/Rout%20Solution/Rout/Rout/stdafx.h
+END
+MenuButton.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/MenuButton.cpp
+END
+Player.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/363/Rout%20Solution/Rout/Rout/Player.h
+END
+LevelManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/346/Rout%20Solution/Rout/Rout/LevelManager.cpp
+END
+GameEntity3D.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/329/Rout%20Solution/Rout/Rout/GameEntity3D.h
+END
+WinScreen.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/294/Rout%20Solution/Rout/Rout/WinScreen.h
+END
+Particle.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/288/Rout%20Solution/Rout/Rout/Particle.cpp
+END
+Faded.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/359/Rout%20Solution/Rout/Rout/Faded.cpp
+END
+GameEntity.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/GameEntity.cpp
+END
+dxManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/363/Rout%20Solution/Rout/Rout/dxManager.h
+END
+Bonewheel.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/292/Rout%20Solution/Rout/Rout/Bonewheel.h
+END
+textTutorial.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/339/Rout%20Solution/Rout/Rout/textTutorial.h
+END
+Definitions.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/48/Rout%20Solution/Rout/Rout/Definitions.h
+END
+FullTile.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/181/Rout%20Solution/Rout/Rout/FullTile.cpp
+END
+SelectButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/SelectButton.h
+END
+StateManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/294/Rout%20Solution/Rout/Rout/StateManager.h
+END
+EmptyTile.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/346/Rout%20Solution/Rout/Rout/EmptyTile.h
+END
+Torch.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/272/Rout%20Solution/Rout/Rout/Torch.h
+END
+DeathScreen.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/288/Rout%20Solution/Rout/Rout/DeathScreen.cpp
+END
+sandstone.dds
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/296/Rout%20Solution/Rout/Rout/sandstone.dds
+END
+Slider.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/59/Rout%20Solution/Rout/Rout/Slider.h
+END
+CollisionEntity.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/repos/Rout/!svn/ver/179/Rout%20Solution/Rout/Rout/CollisionEntity.cpp
+END
+Main.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/Rout/!svn/ver/357/Rout%20Solution/Rout/Rout/Main.h
+END
+stdafx.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/48/Rout%20Solution/Rout/Rout/stdafx.cpp
+END
+dirt.dds
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/351/Rout%20Solution/Rout/Rout/dirt.dds
+END
+Node.h
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/repos/Rout/!svn/ver/249/Rout%20Solution/Rout/Rout/Node.h
+END
+GameEntity3D.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/324/Rout%20Solution/Rout/Rout/GameEntity3D.cpp
+END
+WinScreen.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/307/Rout%20Solution/Rout/Rout/WinScreen.cpp
+END
+GameMenu.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/288/Rout%20Solution/Rout/Rout/GameMenu.cpp
+END
+Eater.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/359/Rout%20Solution/Rout/Rout/Eater.cpp
+END
+GameEntity2D.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/77/Rout%20Solution/Rout/Rout/GameEntity2D.h
+END
+Collider.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/228/Rout%20Solution/Rout/Rout/Collider.h
+END
+MenuButton.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/MenuButton.h
+END
+LevelManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/319/Rout%20Solution/Rout/Rout/LevelManager.h
+END
+GameTimer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/55/Rout%20Solution/Rout/Rout/GameTimer.cpp
+END
+GameEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/GameEntity.h
+END
+SelectButton.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/SelectButton.cpp
+END
+StateManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/74/Rout%20Solution/Rout/Rout/StateManager.cpp
+END
+Light.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/195/Rout%20Solution/Rout/Rout/Light.h
+END
+EntityManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/repos/Rout/!svn/ver/337/Rout%20Solution/Rout/Rout/EntityManager.h
+END
+Torch.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/repos/Rout/!svn/ver/273/Rout%20Solution/Rout/Rout/Torch.cpp
+END
+WoodCrate01.dds
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/repos/Rout/!svn/ver/79/Rout%20Solution/Rout/Rout/WoodCrate01.dds
+END
+Enemy.h
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/346/Rout%20Solution/Rout/Rout/Enemy.h
+END
+Vertex.h
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/317/Rout%20Solution/Rout/Rout/Vertex.h
+END
+FullTile.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/142/Rout%20Solution/Rout/Rout/FullTile.h
+END
+Node.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/repos/Rout/!svn/ver/249/Rout%20Solution/Rout/Rout/Node.cpp
+END
+TextField.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/123/Rout%20Solution/Rout/Rout/TextField.cpp
+END
+Camera.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/repos/Rout/!svn/ver/181/Rout%20Solution/Rout/Rout/Camera.cpp
+END
+Key.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/repos/Rout/!svn/ver/360/Rout%20Solution/Rout/Rout/Key.cpp
+END
+basicEffect.fx
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/repos/Rout/!svn/ver/63/Rout%20Solution/Rout/Rout/basicEffect.fx
+END
+BoxEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/repos/Rout/!svn/ver/172/Rout%20Solution/Rout/Rout/BoxEntity.h
+END
+AudioManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/repos/Rout/!svn/ver/351/Rout%20Solution/Rout/Rout/AudioManager.cpp
+END
+CollisionEntity.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/repos/Rout/!svn/ver/123/Rout%20Solution/Rout/Rout/CollisionEntity.h
+END
+Collider.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/repos/Rout/!svn/ver/154/Rout%20Solution/Rout/Rout/Collider.cpp
+END
